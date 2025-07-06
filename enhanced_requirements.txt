@@ -1,0 +1,73 @@
+# Enhanced Protype.AI Requirements
+# Developed by Islam Ibrahim, Director of Carrot Studio
+
+# Core Web Framework
+flask==2.3.3
+flask-cors==4.0.0
+gunicorn==21.2.0
+
+# Database Support
+sqlite3  # Built into Python
+psycopg2-binary==2.9.9  # PostgreSQL support
+
+# AI and Machine Learning
+google-generativeai==0.3.2
+spacy==3.7.2
+scikit-learn==1.3.2
+transformers==4.35.2
+torch==2.1.0
+torch-geometric==2.4.0
+sentence-transformers==2.2.2
+
+# Data Processing and Analytics
+numpy==1.26.2
+pandas==2.1.3
+networkx==3.2.1
+
+# Search and Information Retrieval
+elasticsearch==8.11.0
+serpapi==0.1.0
+beautifulsoup4==4.12.2
+requests==2.31.0
+
+# Background Processing
+celery==5.3.6
+redis==5.0.1
+
+# Visualization and UI
+matplotlib==3.8.2
+plotly==5.18.0
+
+# Text-to-Speech and Audio
+pydub==0.25.1
+elevenlabs==0.2.26
+
+# Time and Date Handling
+pytz>=2024.1
+python-dateutil>=2.8.2
+
+# Image Processing (for multimodal features)
+pillow>=10.2.0
+
+# Natural Language Processing
+nltk>=3.8.1
+
+# Utilities
+uuid  # Built into Python
+hashlib  # Built into Python
+threading  # Built into Python
+json  # Built into Python
+logging  # Built into Python
+datetime  # Built into Python
+os  # Built into Python
+time  # Built into Python
+random  # Built into Python
+typing  # Built into Python
+
+# Development and Security
+python-dotenv==1.0.0  # For environment variables
+cryptography==41.0.7  # For secure operations
+
+# Optional enhancements
+faiss-cpu==1.7.4  # For advanced vector search
+streamlit==1.28.2  # Alternative UI framework option

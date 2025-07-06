@@ -1,0 +1,1013 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protype.AI - Enhanced Conversational AI Platform</title>
+    
+    <!-- Material Design and Modern CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/@mdi/font@7.4.47/css/materialdesignicons.min.css" rel="stylesheet">
+    
+    <!-- Modern CSS Framework -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    
+    <!-- Custom Enhanced Styles -->
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --primary-dark: #1E40AF;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --danger-color: #EF4444;
+            --background-light: #F8FAFC;
+            --background-dark: #0F172A;
+            --surface-light: #FFFFFF;
+            --surface-dark: #1E293B;
+            --text-light: #1F2937;
+            --text-dark: #F1F5F9;
+            --border-light: #E5E7EB;
+            --border-dark: #374151;
+            --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-dark: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+            --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+            --gradient-secondary: linear-gradient(135deg, #10B981 0%, #059669 100%);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-light);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            line-height: 1.6;
+        }
+
+        /* Dark theme */
+        [data-theme="dark"] {
+            --background-light: #0F172A;
+            --surface-light: #1E293B;
+            --text-light: #F1F5F9;
+            --border-light: #374151;
+            --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        }
+
+        [data-theme="dark"] body {
+            background: var(--background-dark);
+            color: var(--text-dark);
+        }
+
+        /* Enhanced Components */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .card-modern {
+            background: var(--surface-light);
+            border-radius: 16px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .card-modern:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -6px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gradient-secondary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+        }
+
+        .input-modern {
+            background: var(--surface-light);
+            border: 2px solid var(--border-light);
+            border-radius: 12px;
+            padding: 16px 20px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            width: 100%;
+            resize: none;
+        }
+
+        .input-modern:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .chat-container {
+            height: 60vh;
+            overflow-y: auto;
+            padding: 24px;
+            background: var(--surface-light);
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            scroll-behavior: smooth;
+        }
+
+        .chat-message {
+            margin-bottom: 20px;
+            padding: 16px 20px;
+            border-radius: 16px;
+            max-width: 80%;
+            animation: slideInUp 0.4s ease;
+            position: relative;
+        }
+
+        .chat-message.user {
+            background: var(--gradient-primary);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 4px;
+        }
+
+        .chat-message.bot {
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            margin-right: auto;
+            border-bottom-left-radius: 4px;
+        }
+
+        .typing-indicator {
+            display: none;
+            align-items: center;
+            gap: 8px;
+            padding: 16px 20px;
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 16px;
+            border-bottom-left-radius: 4px;
+            max-width: 120px;
+            margin-bottom: 20px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            animation: typing 1.4s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 24px 0;
+        }
+
+        .stat-card {
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-light);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 12px 0;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            opacity: 0.7;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin: 32px 0;
+        }
+
+        .feature-card {
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 32px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 16px;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .navbar {
+            background: var(--surface-light);
+            border-bottom: 1px solid var(--border-light);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle {
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 50px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-toggle:hover {
+            background: var(--border-light);
+        }
+
+        .achievement-badge {
+            background: var(--gradient-secondary);
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            animation: bounceIn 0.6s ease;
+        }
+
+        @keyframes bounceIn {
+            0% { transform: scale(0); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .suggestions-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .suggestion-chip {
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .suggestion-chip:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .mobile-navbar {
+            display: none;
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            right: 20px;
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            border-radius: 20px;
+            padding: 16px;
+            z-index: 1000;
+            box-shadow: var(--shadow-light);
+        }
+
+        @media (max-width: 768px) {
+            .mobile-navbar {
+                display: flex;
+                justify-content: space-around;
+            }
+            
+            .desktop-navbar {
+                display: none;
+            }
+            
+            .chat-message {
+                max-width: 90%;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Scrollbar Styling */
+        .chat-container::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-container::-webkit-scrollbar-track {
+            background: var(--border-light);
+            border-radius: 3px;
+        }
+
+        .chat-container::-webkit-scrollbar-thumb {
+            background: var(--primary-color);
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                            <span class="text-white font-bold text-xl">P</span>
+                        </div>
+                        <div>
+                            <h1 class="text-xl font-bold">Protype.AI</h1>
+                            <p class="text-sm opacity-60">Enhanced AI Platform</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="desktop-navbar flex items-center space-x-6">
+                    <a href="/" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <span class="material-icons">chat</span>
+                        <span>Chat</span>
+                    </a>
+                    <a href="/dashboard" class="flex items-center space-x-2 px-4 py-2 rounded-lg hover:bg-gray-100 transition-colors">
+                        <span class="material-icons">dashboard</span>
+                        <span>Dashboard</span>
+                    </a>
+                    <button class="theme-toggle" onclick="toggleTheme()">
+                        <span class="material-icons" id="theme-icon">dark_mode</span>
+                        <span id="theme-text">Dark</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <!-- Hero Section -->
+        <div class="text-center mb-12">
+            <h1 class="text-5xl font-bold mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                Welcome to Protype.AI
+            </h1>
+            <p class="text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                Experience the future of conversational AI with advanced learning capabilities, 
+                achievement tracking, and intelligent responses powered by cutting-edge technology.
+            </p>
+            
+            <!-- Quick Stats -->
+            <div class="stats-grid max-w-4xl mx-auto">
+                <div class="stat-card">
+                    <div class="stat-value" id="knowledge-count">0</div>
+                    <div class="stat-label">Knowledge Items</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="achievement-count">0</div>
+                    <div class="stat-label">Achievements</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="confidence-score">0%</div>
+                    <div class="stat-label">Avg Confidence</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="growth-rate">0</div>
+                    <div class="stat-label">Daily Growth</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chat Interface -->
+        <div class="card-modern p-8 mb-8">
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-2xl font-bold flex items-center space-x-2">
+                    <span class="material-icons text-blue-500">psychology</span>
+                    <span>AI Conversation</span>
+                </h2>
+                <div class="flex items-center space-x-4">
+                    <button onclick="clearChat()" class="btn-secondary flex items-center space-x-2">
+                        <span class="material-icons">clear_all</span>
+                        <span>Clear</span>
+                    </button>
+                    <div class="achievement-notification" id="achievement-notification" style="display: none;">
+                        <span class="achievement-badge">
+                            <span class="material-icons">emoji_events</span>
+                            <span id="achievement-text">Achievement Unlocked!</span>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Messages -->
+            <div class="chat-container" id="chat-container">
+                <div class="chat-message bot">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm">AI</span>
+                        </div>
+                        <div>
+                            <p>Hello! I'm your enhanced AI assistant. I can help you with questions, learn new information, and track my progress through achievements. What would you like to know?</p>
+                            <div class="text-xs opacity-60 mt-2 flex items-center space-x-2">
+                                <span class="material-icons text-xs">access_time</span>
+                                <span id="current-time"></span>
+                                <span class="material-icons text-xs">verified</span>
+                                <span>Confidence: 100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Typing Indicator -->
+                <div class="typing-indicator" id="typing-indicator">
+                    <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span class="text-white text-sm">AI</span>
+                    </div>
+                    <div class="flex space-x-1">
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                        <div class="typing-dot"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Chat Input -->
+            <div class="mt-6">
+                <div class="flex space-x-4">
+                    <textarea 
+                        id="chat-input" 
+                        class="input-modern flex-1" 
+                        placeholder="Ask me anything... (Press Enter to send, Shift+Enter for new line)"
+                        rows="3"
+                        onkeydown="handleChatInput(event)"
+                    ></textarea>
+                    <button onclick="sendMessage()" class="btn-primary flex items-center space-x-2" id="send-button">
+                        <span class="material-icons">send</span>
+                        <span>Send</span>
+                    </button>
+                </div>
+                
+                <!-- Suggestions -->
+                <div class="suggestions-container" id="suggestions-container">
+                    <!-- Dynamic suggestions will be added here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Features Section -->
+        <div class="feature-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons">psychology</span>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Advanced AI Learning</h3>
+                <p class="text-gray-600">
+                    Continuous learning from interactions with achievement tracking 
+                    and performance analytics for optimal responses.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons">emoji_events</span>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Achievement System</h3>
+                <p class="text-gray-600">
+                    Track AI learning milestones and unlock achievements as the 
+                    system grows more knowledgeable and capable.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons">analytics</span>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Real-time Analytics</h3>
+                <p class="text-gray-600">
+                    Monitor learning progress, confidence scores, and performance 
+                    metrics with comprehensive dashboard insights.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons">school</span>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Knowledge Teaching</h3>
+                <p class="text-gray-600">
+                    Teach the AI new information and watch it integrate knowledge 
+                    intelligently with validation and categorization.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons">search</span>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Smart Search</h3>
+                <p class="text-gray-600">
+                    Powerful search capabilities through local knowledge base 
+                    with intelligent ranking and relevance scoring.
+                </p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <span class="material-icons">dark_mode</span>
+                </div>
+                <h3 class="text-xl font-bold mb-4">Modern Interface</h3>
+                <p class="text-gray-600">
+                    Beautiful, responsive design with dark/light themes and 
+                    smooth animations for optimal user experience.
+                </p>
+            </div>
+        </div>
+
+        <!-- Teaching Interface -->
+        <div class="card-modern p-8 mb-8">
+            <h2 class="text-2xl font-bold mb-6 flex items-center space-x-2">
+                <span class="material-icons text-green-500">school</span>
+                <span>Teach the AI</span>
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div>
+                    <label class="block text-sm font-medium mb-2">Question</label>
+                    <textarea 
+                        id="teach-question" 
+                        class="input-modern" 
+                        placeholder="What question should the AI be able to answer?"
+                        rows="3"
+                    ></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Answer</label>
+                    <textarea 
+                        id="teach-answer" 
+                        class="input-modern" 
+                        placeholder="What should be the correct answer?"
+                        rows="3"
+                    ></textarea>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Category</label>
+                    <select id="teach-category" class="input-modern">
+                        <option value="general">General Knowledge</option>
+                        <option value="science">Science</option>
+                        <option value="technology">Technology</option>
+                        <option value="history">History</option>
+                        <option value="art">Art & Culture</option>
+                        <option value="business">Business</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div>
+                    <label class="block text-sm font-medium mb-2">Confidence Level</label>
+                    <select id="teach-confidence" class="input-modern">
+                        <option value="0.9">High (90%)</option>
+                        <option value="0.8" selected>Good (80%)</option>
+                        <option value="0.7">Medium (70%)</option>
+                        <option value="0.6">Low (60%)</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="mt-6">
+                <button onclick="teachAI()" class="btn-secondary flex items-center space-x-2" id="teach-button">
+                    <span class="material-icons">add</span>
+                    <span>Add Knowledge</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Navigation -->
+    <div class="mobile-navbar">
+        <a href="/" class="flex flex-col items-center space-y-1">
+            <span class="material-icons">chat</span>
+            <span class="text-xs">Chat</span>
+        </a>
+        <a href="/dashboard" class="flex flex-col items-center space-y-1">
+            <span class="material-icons">dashboard</span>
+            <span class="text-xs">Dashboard</span>
+        </a>
+        <button onclick="toggleTheme()" class="flex flex-col items-center space-y-1">
+            <span class="material-icons" id="mobile-theme-icon">dark_mode</span>
+            <span class="text-xs">Theme</span>
+        </button>
+    </div>
+
+    <!-- JavaScript -->
+    <script>
+        // Global state
+        let currentSession = null;
+        let chatHistory = [];
+        
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            loadAnalytics();
+            
+            // Load theme preference
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            updateThemeToggle(savedTheme);
+        });
+        
+        function updateCurrentTime() {
+            const now = new Date();
+            document.getElementById('current-time').textContent = now.toLocaleTimeString();
+        }
+        
+        async function loadAnalytics() {
+            try {
+                const response = await fetch('/api/analytics');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const analytics = data.data;
+                    document.getElementById('knowledge-count').textContent = analytics.total_knowledge || 0;
+                    document.getElementById('achievement-count').textContent = analytics.total_achievements || 0;
+                    document.getElementById('confidence-score').textContent = 
+                        Math.round((analytics.avg_confidence || 0) * 100) + '%';
+                    document.getElementById('growth-rate').textContent = analytics.knowledge_growth_rate || 0;
+                }
+            } catch (error) {
+                console.error('Failed to load analytics:', error);
+            }
+        }
+        
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeToggle(newTheme);
+        }
+        
+        function updateThemeToggle(theme) {
+            const themeIcon = document.getElementById('theme-icon');
+            const themeText = document.getElementById('theme-text');
+            const mobileThemeIcon = document.getElementById('mobile-theme-icon');
+            
+            if (theme === 'dark') {
+                themeIcon.textContent = 'light_mode';
+                themeText.textContent = 'Light';
+                mobileThemeIcon.textContent = 'light_mode';
+            } else {
+                themeIcon.textContent = 'dark_mode';
+                themeText.textContent = 'Dark';
+                mobileThemeIcon.textContent = 'dark_mode';
+            }
+        }
+        
+        function handleChatInput(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage();
+            }
+        }
+        
+        async function sendMessage() {
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message to chat
+            addChatMessage(message, 'user');
+            input.value = '';
+            
+            // Show typing indicator
+            showTypingIndicator();
+            
+            // Update send button
+            const sendButton = document.getElementById('send-button');
+            sendButton.innerHTML = '<div class="loading-spinner"></div><span>Sending...</span>';
+            sendButton.disabled = true;
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ question: message })
+                });
+                
+                const data = await response.json();
+                
+                hideTypingIndicator();
+                
+                if (data.success) {
+                    // Add AI response
+                    addChatMessage(data.answer, 'bot', {
+                        source: data.source,
+                        confidence: data.confidence,
+                        processingTime: data.processing_time,
+                        suggestions: data.suggestions
+                    });
+                    
+                    // Update session
+                    currentSession = data.session_id;
+                    
+                    // Show suggestions
+                    if (data.suggestions && data.suggestions.length > 0) {
+                        showSuggestions(data.suggestions);
+                    }
+                    
+                    // Reload analytics
+                    loadAnalytics();
+                } else {
+                    addChatMessage('Sorry, I encountered an error. Please try again.', 'bot');
+                }
+            } catch (error) {
+                hideTypingIndicator();
+                addChatMessage('Sorry, I encountered a network error. Please check your connection and try again.', 'bot');
+            }
+            
+            // Reset send button
+            sendButton.innerHTML = '<span class="material-icons">send</span><span>Send</span>';
+            sendButton.disabled = false;
+        }
+        
+        function addChatMessage(message, sender, metadata = {}) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `chat-message ${sender}`;
+            
+            const now = new Date();
+            const timeString = now.toLocaleTimeString();
+            
+            if (sender === 'user') {
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3 justify-end">
+                        <div class="text-right">
+                            <p>${message}</p>
+                            <div class="text-xs opacity-60 mt-2 flex items-center justify-end space-x-2">
+                                <span class="material-icons text-xs">access_time</span>
+                                <span>${timeString}</span>
+                            </div>
+                        </div>
+                        <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm">You</span>
+                        </div>
+                    </div>
+                `;
+            } else {
+                let confidencePercent = metadata.confidence ? Math.round(metadata.confidence * 100) : 0;
+                messageDiv.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm">AI</span>
+                        </div>
+                        <div class="flex-1">
+                            <p>${message}</p>
+                            <div class="text-xs opacity-60 mt-2 flex items-center space-x-4">
+                                <div class="flex items-center space-x-1">
+                                    <span class="material-icons text-xs">access_time</span>
+                                    <span>${timeString}</span>
+                                </div>
+                                ${metadata.confidence ? `
+                                <div class="flex items-center space-x-1">
+                                    <span class="material-icons text-xs">verified</span>
+                                    <span>Confidence: ${confidencePercent}%</span>
+                                </div>
+                                ` : ''}
+                                ${metadata.source ? `
+                                <div class="flex items-center space-x-1">
+                                    <span class="material-icons text-xs">source</span>
+                                    <span>Source: ${metadata.source}</span>
+                                </div>
+                                ` : ''}
+                                ${metadata.processingTime ? `
+                                <div class="flex items-center space-x-1">
+                                    <span class="material-icons text-xs">timer</span>
+                                    <span>${metadata.processingTime}s</span>
+                                </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            chatContainer.appendChild(messageDiv);
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Store in chat history
+            chatHistory.push({ message, sender, timestamp: now, metadata });
+        }
+        
+        function showTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'flex';
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+        
+        function hideTypingIndicator() {
+            document.getElementById('typing-indicator').style.display = 'none';
+        }
+        
+        function showSuggestions(suggestions) {
+            const container = document.getElementById('suggestions-container');
+            container.innerHTML = '';
+            
+            suggestions.forEach(suggestion => {
+                const chip = document.createElement('button');
+                chip.className = 'suggestion-chip';
+                chip.textContent = suggestion;
+                chip.onclick = () => {
+                    document.getElementById('chat-input').value = suggestion;
+                    sendMessage();
+                };
+                container.appendChild(chip);
+            });
+        }
+        
+        function clearChat() {
+            const chatContainer = document.getElementById('chat-container');
+            chatContainer.innerHTML = `
+                <div class="chat-message bot">
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center flex-shrink-0">
+                            <span class="text-white text-sm">AI</span>
+                        </div>
+                        <div>
+                            <p>Chat cleared! How can I help you today?</p>
+                            <div class="text-xs opacity-60 mt-2 flex items-center space-x-2">
+                                <span class="material-icons text-xs">access_time</span>
+                                <span id="current-time"></span>
+                                <span class="material-icons text-xs">verified</span>
+                                <span>Confidence: 100%</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            chatHistory = [];
+            document.getElementById('suggestions-container').innerHTML = '';
+            updateCurrentTime();
+        }
+        
+        async function teachAI() {
+            const question = document.getElementById('teach-question').value.trim();
+            const answer = document.getElementById('teach-answer').value.trim();
+            const category = document.getElementById('teach-category').value;
+            const confidence = parseFloat(document.getElementById('teach-confidence').value);
+            
+            if (!question || !answer) {
+                alert('Please provide both question and answer.');
+                return;
+            }
+            
+            const teachButton = document.getElementById('teach-button');
+            teachButton.innerHTML = '<div class="loading-spinner"></div><span>Adding...</span>';
+            teachButton.disabled = true;
+            
+            try {
+                const response = await fetch('/api/teach', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        question: question,
+                        answer: answer,
+                        category: category,
+                        confidence: confidence
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Clear form
+                    document.getElementById('teach-question').value = '';
+                    document.getElementById('teach-answer').value = '';
+                    document.getElementById('teach-category').value = 'general';
+                    document.getElementById('teach-confidence').value = '0.8';
+                    
+                    // Show success message
+                    showAchievementNotification('Knowledge Added Successfully! 🎉');
+                    
+                    // Reload analytics
+                    loadAnalytics();
+                } else {
+                    alert('Failed to add knowledge: ' + (data.error || 'Unknown error'));
+                }
+            } catch (error) {
+                alert('Network error: ' + error.message);
+            }
+            
+            // Reset button
+            teachButton.innerHTML = '<span class="material-icons">add</span><span>Add Knowledge</span>';
+            teachButton.disabled = false;
+        }
+        
+        function showAchievementNotification(text) {
+            const notification = document.getElementById('achievement-notification');
+            const textElement = document.getElementById('achievement-text');
+            
+            textElement.textContent = text;
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

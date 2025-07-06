@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Protype.AI - Enhanced Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary-color: #3B82F6;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --background-light: #F8FAFC;
+            --surface-light: #FFFFFF;
+            --text-light: #1F2937;
+            --border-light: #E5E7EB;
+            --shadow-light: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --gradient-primary: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--background-light);
+            color: var(--text-light);
+        }
+
+        .card-modern {
+            background: var(--surface-light);
+            border-radius: 16px;
+            box-shadow: var(--shadow-light);
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .card-modern:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px -4px rgba(0, 0, 0, 0.1);
+        }
+
+        .stat-card {
+            background: var(--surface-light);
+            border-radius: 16px;
+            padding: 24px;
+            text-align: center;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s ease;
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 12px 0;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            space-x: 12px;
+            padding: 16px;
+            border-radius: 12px;
+            background: var(--surface-light);
+            border: 1px solid var(--border-light);
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .achievement-item:hover {
+            transform: translateX(4px);
+            box-shadow: var(--shadow-light);
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="bg-white border-b border-gray-200 px-6 py-4">
+        <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                    <span class="text-white font-bold text-xl">P</span>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold">Protype.AI Dashboard</h1>
+                    <p class="text-sm text-gray-600">Analytics & Management</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <a href="/" class="btn-primary flex items-center space-x-2">
+                    <span class="material-icons">chat</span>
+                    <span>Back to Chat</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="max-w-7xl mx-auto px-6 py-8">
+        <!-- Stats Overview -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            <div class="stat-card">
+                <div class="stat-value">{{ analytics.total_knowledge or 0 }}</div>
+                <div class="text-sm text-gray-600">Knowledge Items</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ analytics.total_achievements or 0 }}</div>
+                <div class="text-sm text-gray-600">Achievements</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ "%.0f"|format((analytics.avg_confidence or 0) * 100) }}%</div>
+                <div class="text-sm text-gray-600">Avg Confidence</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">{{ analytics.knowledge_growth_rate or 0 }}</div>
+                <div class="text-sm text-gray-600">Daily Growth</div>
+            </div>
+        </div>
+
+        <!-- Charts and Analytics -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <div class="card-modern p-6">
+                <h3 class="text-lg font-bold mb-4">Knowledge Growth</h3>
+                <canvas id="growthChart" width="400" height="200"></canvas>
+            </div>
+            <div class="card-modern p-6">
+                <h3 class="text-lg font-bold mb-4">Category Distribution</h3>
+                <canvas id="categoryChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+
+        <!-- Recent Achievements -->
+        <div class="card-modern p-6 mb-8">
+            <h3 class="text-lg font-bold mb-4">Recent Achievements</h3>
+            <div id="achievements-list">
+                <div class="text-center text-gray-500 py-8">
+                    Loading achievements...
+                </div>
+            </div>
+        </div>
+
+        <!-- System Actions -->
+        <div class="card-modern p-6">
+            <h3 class="text-lg font-bold mb-4">System Management</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <button onclick="generateReport()" class="btn-primary flex items-center justify-center space-x-2">
+                    <span class="material-icons">assessment</span>
+                    <span>Generate Report</span>
+                </button>
+                <button onclick="exportData()" class="btn-primary flex items-center justify-center space-x-2">
+                    <span class="material-icons">download</span>
+                    <span>Export Data</span>
+                </button>
+                <button onclick="refreshAnalytics()" class="btn-primary flex items-center justify-center space-x-2">
+                    <span class="material-icons">refresh</span>
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            loadAchievements();
+            initializeCharts();
+        });
+
+        async function loadAchievements() {
+            try {
+                const response = await fetch('/api/achievements');
+                const data = await response.json();
+                
+                if (data.success) {
+                    const container = document.getElementById('achievements-list');
+                    
+                    if (data.achievements.length === 0) {
+                        container.innerHTML = '<div class="text-center text-gray-500 py-8">No achievements yet. Start using the AI to unlock achievements!</div>';
+                        return;
+                    }
+                    
+                    container.innerHTML = '';
+                    data.achievements.forEach(achievement => {
+                        const item = document.createElement('div');
+                        item.className = 'achievement-item';
+                        item.innerHTML = `
+                            <div class="text-2xl mr-3">${achievement.icon}</div>
+                            <div class="flex-1">
+                                <h4 class="font-semibold">${achievement.title}</h4>
+                                <p class="text-sm text-gray-600">${achievement.description}</p>
+                                <p class="text-xs text-gray-400">${new Date(achievement.unlocked_at).toLocaleDateString()}</p>
+                            </div>
+                            <div class="text-sm font-medium text-blue-600">${achievement.points} pts</div>
+                        `;
+                        container.appendChild(item);
+                    });
+                }
+            } catch (error) {
+                console.error('Failed to load achievements:', error);
+            }
+        }
+
+        function initializeCharts() {
+            // Growth Chart
+            const growthCtx = document.getElementById('growthChart').getContext('2d');
+            new Chart(growthCtx, {
+                type: 'line',
+                data: {
+                    labels: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+                    datasets: [{
+                        label: 'Knowledge Items',
+                        data: [12, 19, 15, 25, 22, 18, 24],
+                        borderColor: '#3B82F6',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Category Chart
+            const categoryCtx = document.getElementById('categoryChart').getContext('2d');
+            new Chart(categoryCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['General', 'Science', 'Technology', 'History', 'Art'],
+                    datasets: [{
+                        data: [30, 25, 20, 15, 10],
+                        backgroundColor: [
+                            '#3B82F6',
+                            '#10B981',
+                            '#F59E0B',
+                            '#EF4444',
+                            '#8B5CF6'
+                        ]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+        }
+
+        async function refreshAnalytics() {
+            location.reload();
+        }
+
+        function generateReport() {
+            alert('Report generation feature coming soon!');
+        }
+
+        function exportData() {
+            alert('Data export feature coming soon!');
+        }
+    </script>
+</body>
+</html>
