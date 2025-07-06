@@ -43,7 +43,7 @@ elevenlabs==0.2.26
 # Note: These are installed via npm, not pip
 # npm install -g create-react-app
 # ✅ مكتبات الذكاء الاصطناعي والتعلم العميق (Deep Learning & Transformers)
-torch==2.0.1+cpu  # PyTorch - الإصدار المناسب لـ CPU
+torch>=2.0.1  # PyTorch - الإصدار المناسب لـ CPU
 transformers>=4.38.1  # أحدث إصدار لدعم نماذج DeepSeek وLLaMA
 torch-geometric==2.3.0  # لدعم Graph Neural Networks (GNN)
 
@@ -53,10 +53,10 @@ sentence-transformers>=2.2.2  # استخراج ميزات النصوص باست�
 
 # ✅ دعم الإدراك الزمني والتعامل مع التواريخ
 pytz>=2024.1  # إدارة المناطق الزمنية
-dateutil>=2.8.2  # تحليل التواريخ والتوقيت
+python-dateutil>=2.8.2  # تحليل التواريخ والتوقيت
 
 
 # ✅ مكتبات اختيارية لتحليل الصور والصوت (إذا احتجت إليها لاحقًا)
-torchvision>=0.15.0+cpu  # معالجة الصور
+torchvision>=0.15.0  # معالجة الصور
 pillow>=10.2.0  # دعم الصور في Python
-torchaudio>=2.0.0+cpu  # معالجة الصوت
+torchaudio>=2.0.0  # معالجة الصوت
